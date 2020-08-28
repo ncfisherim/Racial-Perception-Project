@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>IAT Attempt</title>
+        <script src="jspsych-6.1.0/jspsych.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-image-button-response.js"></script>
+        <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+        <script src="jspsych-6.1.0/plugins/jspsych-iat-image.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-iat-html.js"></script>
+        <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    </head>
+    <body></body>
+      <script>
+
+          /* create timeline */
+          var timeline = [];
+
+          /* define welcome message trial */
+          var welcome = {
+            type: "html-keyboard-response",
+            stimulus: "Welcome to Nathan's IAT Attempt! Press any key to begin."
+          };
+          timeline.push(welcome);
+
+          var initialinstructions = {
+            type: "image-button-response",
+            stimulus: "img/table.png",
+            stimulus_height: 300,
+            choices: ['Continue'],
+            prompt: "<p>First, you will use the 'E' and 'I' computer keys " +
+              "to categorize items into groups as fast as you can.</p>" +
+              "<p>These are the four groups and the items that belong to each.  " +
+              " There are seven parts.</p><p>The instructions change for each part," +
+              " so pay attention!</p>",
+          };
+          timeline.push(initialinstructions);
+
+          /* define instructions trial */
+          var instructions1 = {
+            type: "html-keyboard-response",
+            stimulus: "<p>Put a left finger on the <strong>E</strong> key for " +
+                "items that belong to the category <strong>Black people</strong>." +
+                "</p><p>Put a right finger on the <strong>I</strong> key for items " +
+                "that belong to the category <strong>White people</strong>.</p>" +
+                "<p>Items will appear one at a time.</p><p>If you make a mistake, " +
+                "a red X will appear.  Press the other key to continue.</p><p>" +
+                "<u>Go as fast as you can</u> while being accurate.</p><p>Press " +
+                "the <strong>space bar</strong> when you are ready to start."+
+                "<div style='width: 700px;'>"+
+                "</div>",
+            choices: [32],
+            post_trial_gap: 250
+          };
+
+          var black_stimuli = [
+            { stimulus: "img/bm1.jpg", data: { test_part: 'trial_block1'} },
+            { stimulus: "img/bm2.jpg", data: { test_part: 'trial_block1'} },
+            { stimulus: "img/bm3.jpg", data: { test_part: 'trial_block1'} },
+            { stimulus: "img/bf1.jpg", data: { test_part: 'trial_block1'} },
+            { stimulus: "img/bf2.jpg", data: { test_part: 'trial_block1'} },
+            { stimulus: "img/bf3.jpg", data: { test_part: 'trial_block1'} }
+          ];
+
+          var white_stimuli = [
+            { stimulus: "img/wm1.jpg", data: { test_part: 'trial_block4'} },
+            { stimulus: "img/wm2.jpg", data: { test_part: 'trial_block4'} },
+            { stimulus: "img/wm3.jpg", data: { test_part: 'trial_block4'} },
+            { stimulus: "img/wf1.jpg", data: { test_part: 'trial_block4'} },
+            { stimulus: "img/wf2.jpg", data: { test_part: 'trial_block4'} },
+            { stimulus: "img/wf3.jpg", data: { test_part: 'trial_block4'} }
+          ];
+
+          var trial_block1 = {
+            type: 'iat-image',
+            stimulus: jsPsych.timelineVariable('stimulus'),
+            stimulus_height:30,
+            stim_key_association: 'left',
+            html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+            bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the correct key to continue</p>',
+            force_correct_key_press: true,
+            display_feedback: true,
+            timing_response: 3000, //Only if display_feedback is false
+            left_category_key: 'E',
+            right_category_key: 'I',
+            left_category_label: ['Black people'],
+            right_category_label: ['White people'],
+            response_ends_trial: true
+          }
+
+          var trial_block2 = {
+            type: 'iat-html',
+            stimulus: 'LOVE',
+            stim_key_association: 'right',
+            html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+            bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+            force_correct_key_press: true,
+            display_feedback: true,
+            timing_response: 3000, //Only if display_feedback is false
+            left_category_key: 'E',
+            right_category_key: 'I',
+            left_category_label: ['WHITE or BAD'],
+            right_category_label: ['BLACK or GOOD'],
+            response_ends_trial: true
+          }
+
+          var trial_block3 = {
+            type: 'iat-image',
+            stimulus: jsPsych.timelineVariable('stimulus'),
+            stimulus_height:30,
+            stim_key_association: 'right',
+            html_when_wrong: '<span style="color: red; font-size: 80px">X</span>',
+            bottom_instructions: '<p>If you press the wrong key, a red X will appear. Press the other key to continue</p>',
+            force_correct_key_press: true,
+            display_feedback: true,
+            timing_response: 3000, //Only if display_feedback is false
+            left_category_key: 'E',
+            right_category_key: 'I',
+            left_category_label: ['Black people'],
+            right_category_label: ['White people'],
+            response_ends_trial: true
+          }
+
+          timeline.push(instructions1);
+
+          var blackface = {
+            timeline: [trial_block1],
+            timeline_variables: black_stimuli,
+            repetitions: 1,
+            randomize_order: true
+          }
+
+          var whiteface = {
+            timeline: [trial_block3],
+            timeline_variables: white_stimuli,
+            repetitions: 1,
+            randomize_order: true
+          }
+
+          var test_procedure1 = {
+            timeline: [blackface, whiteface],
+            repetitions: 1,
+            randomize_order: true
+          }
+          timeline.push(test_procedure1);
+
+          jsPsych.init({
+            timeline: timeline,
+            on_finish: function() {
+              jsPsych.data.displayData();
+            }
+          });
+        </script>
+</html>
