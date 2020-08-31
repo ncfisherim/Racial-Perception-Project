@@ -64,19 +64,29 @@
         "<strong>lighter</strong> than the first face?",
         stimulus_height: 1,
         choices: ['DARKER', 'LIGHTER'],
-			},
+        data: jsPsych.timelineVariable('correct_response'),
+        on_finish: function(data){
+          if(data.button_pressed===jsPsych.timelineVariable('correct_response', true)){
+                data.correct = true;
+            } else {
+                data.correct = false;
+                console.log(jsPsych.timelineVariable('correct_response', true))
+
+          }
+        }
+      },
       {
         type: 'html-slider-response',
         stimulus: '<p>How confident are you in your previous response?</p>',
         labels: ['Not Confident', 'Neutral', 'Very Confident'],
-    }
+      }
 		],
 		timeline_variables: [
-			{ faces: ["img/BB1.jpg", "img/WW1.jpg"] },
-      { faces: ["img/BB2.jpg", "img/WW2.jpg"] },
-      { faces: ["img/NN3.jpg", "img/NN5.jpg"] },
-      { faces: ["img/BW3.jpg", "img/WW5.jpg"] },
-      { faces: ["img/WW3.jpg", "img/BW6.jpg"] },
+			{ faces: ["img/BB1.jpg", "img/WW1.jpg"], correct_response: "0" },
+      { faces: ["img/BB2.jpg", "img/WW2.jpg"], correct_response: "1" },
+      { faces: ["img/NN3.jpg", "img/NN5.jpg"], correct_response: "0" },
+      { faces: ["img/BW3.jpg", "img/WW5.jpg"], correct_response: "1" },
+      { faces: ["img/WW3.jpg", "img/BW6.jpg"], correct_response: "0" },
 
 		],
 		randomize_order: true,
@@ -88,7 +98,7 @@
       type: "html-keyboard-response",
       stimulus: function() {
 
-        var trials = jsPsych.data.get().filter({test_part: 'test'});
+        var trials = jsPsych.data.get().filter({test_part: 'irbtest'});
         var correct_trials = trials.filter({correct: true});
         var accuracy = Math.round(correct_trials.count() / trials.count() * 100);
         var rt = Math.round(correct_trials.select('rt').mean());
